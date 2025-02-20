@@ -1,29 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include("../partials/header") %>
-  </head>
-  <body class="bg-gray-100 text-gray-800">
-    <div class="container mx-auto p-5">
-      <h1 class="text-3xl font-bold text-center mb-5 capitalize">
-        <%= pokemon.name %>
-      </h1>
-      <div class="flex flex-col items-center">
-        <img
-          src="<%= pokemon.sprites.front_default %>"
-          alt="<%= pokemon.name %>"
-          class="w-40 h-40"
-        />
-        <p class="text-lg font-semibold">Height: <%= pokemon.height %></p>
-        <p class="text-lg font-semibold">Weight: <%= pokemon.weight %></p>
-        <p class="text-lg font-semibold">
-          Type: <%= pokemon.types.map(t => t.type.name).join(', ') %>
-        </p>
-      </div>
-      <div class="text-center mt-5">
-        <a href="/" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Back</a>
-      </div>
+
+<head>
+  <%- include("../partials/header") %>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+      /* Pokémon Card Styling */
+      .pokemon-card {
+        width: 380px;
+        background: linear-gradient(135deg, #FFD700, #FF4500);
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border: 5px solid #333;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+
+      /* Holographic Effect */
+      .pokemon-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 0, 0.3) 10%, rgba(255, 0, 0, 0) 80%);
+        z-index: 0;
+        animation: holographic-shimmer 5s infinite linear;
+      }
+
+      /* Shimmer Animation */
+      @keyframes holographic-shimmer {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Holographic Overlay */
+      .holo-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("https://www.transparenttextures.com/patterns/cubes.png"), rgba(255, 255, 255, 0.1);
+        mix-blend-mode: overlay;
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      /* Hover Effects */
+      .pokemon-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      }
+
+      /* Pokémon Image */
+      .pokemon-image {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+        z-index: 1;
+      }
+
+      /* Divider */
+      .divider {
+        height: 2px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.5);
+        margin: 15px 0;
+      }
+
+      /* Type Badge */
+      .type-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 12px;
+        margin: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        border-radius: 12px;
+        text-transform: uppercase;
+      }
+
+      /* Dynamic Type Colors */
+      .fire {
+        background: #F08030;
+      }
+
+      .water {
+        background: #6890F0;
+      }
+
+      .grass {
+        background: #78C850;
+      }
+
+      .electric {
+        background: #F8D030;
+      }
+
+      .ice {
+        background: #98D8D8;
+      }
+
+      .fighting {
+        background: #C03028;
+      }
+
+      .poison {
+        background: #A040A0;
+      }
+
+      .ground {
+        background: #E0C068;
+      }
+
+      .flying {
+        background: #A890F0;
+      }
+
+      .psychic {
+        background: #F85888;
+      }
+
+      .bug {
+        background: #A8B820;
+      }
+
+      .rock {
+        background: #B8A038;
+      }
+
+      .ghost {
+        background: #705898;
+      }
+
+      .dragon {
+        background: #7038F8;
+      }
+
+      .dark {
+        background: #705848;
+      }
+
+      .steel {
+        background: #B8B8D0;
+      }
+
+      .fairy {
+        background: #EE99AC;
+      }
+
+      /* Section Text */
+      .section-text {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+      }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800 flex justify-center items-center h-screen">
+  <div class="pokemon-card relative">
+    <!-- Holographic Overlay -->
+    <div class="holo-overlay"></div>
+
+    <!-- Pokémon Name -->
+    <h1 class="text-3xl font-bold text-center capitalize mb-2 text-white">
+      <%= pokemon.name %>
+    </h1>
+
+    <!-- Pokémon Image -->
+    <img src="<%= pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default %>"
+      alt="<%= pokemon.name %>" class="pokemon-image" />
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Pokémon Type Badges -->
+    <div class="flex justify-center space-x-2 mt-3">
+      <% pokemon.types.forEach(t=> { %>
+        <span class="type-badge <%= t.type.name %>">
+          <i class="fas fa-fire"></i>
+          <%= t.type.name %>
+        </span>
+        <% }); %>
     </div>
-    <%- include("../partials/footer") %>
-  </body>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Pokémon Stats -->
+    <div class="mt-3 text-lg text-white font-semibold">
+      <p class="section-text">
+        <i class="fas fa-ruler-vertical"></i> Height:
+        <span class="text-gray-900">
+          <%= pokemon.height %>
+        </span>
+      </p>
+      <p class="section-text">
+        <i class="fas fa-weight"></i> Weight:
+        <span class="text-gray-900">
+          <%= pokemon.weight %>
+        </span>
+      </p>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Abilities Section -->
+    <div class="mt-3">
+      <h3 class="text-lg font-bold text-white"><i class="fas fa-bolt"></i> Abilities:</h3>
+      <ul class="text-gray-900">
+        <% pokemon.abilities.forEach(a=> { %>
+          <li>⭐ <%= a.ability.name %>
+          </li>
+          <% }); %>
+      </ul>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Base Experience -->
+    <div class="mt-3">
+      <h3 class="text-lg font-bold text-white"><i class="fas fa-star"></i> Base XP:</h3>
+      <p class="text-gray-900">
+        <%= pokemon.base_experience %>
+      </p>
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-5">
+      <a href="/" class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg">
+        <i class="fas fa-arrow-left"></i> Back
+      </a>
+    </div>
+  </div>
+
+  <%- include("../partials/footer") %>
+</body>
+
 </html>
