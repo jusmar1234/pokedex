@@ -1,0 +1,24 @@
+{
+  "name": "pokidex-ardepolla",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+   "start": "node src/server.js",
+   "dev": "nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "Jusmarted",
+  "license": "ISC", 
+  "type": "commonjs",
+  "description": "pokemon index or something",
+  "dependencies": {
+    "express": "^4.21.2",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "axios": "^1.7.9"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+ 
+}
